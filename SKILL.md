@@ -78,11 +78,19 @@ All variables are optional — the skill degrades gracefully when a service key 
 
 | Endpoint override | Default | Purpose |
 |-------------------|---------|---------|
-| `SABNZBD_PORT` | `38080` | SABnzbd HTTP port |
+| `CLAWARR_SCHEME` | `http` | Scheme for Sonarr, Radarr, Readarr, Prowlarr, Overseerr, SABnzbd, and Tautulli |
+| `SONARR_PORT` | `8989` | Sonarr HTTP port |
+| `RADARR_PORT` | `7878` | Radarr HTTP port |
+| `READARR_PORT` | `8787` | Readarr HTTP port |
+| `PROWLARR_PORT` | `9696` | Prowlarr HTTP port |
+| `OVERSEERR_PORT` | `5055` | Overseerr HTTP port |
+| `SABNZBD_PORT` | `8081` | SABnzbd HTTP port |
 | `TAUTULLI_PORT` | `8181` | Tautulli HTTP port |
 | `PLEX_HOST` | `$CLAWARR_HOST` | Plex server host |
 | `PLEX_SCHEME` | `http` | Plex URL scheme (`http` or `https`) |
 | `PLEX_PORT` | `32400` | Plex HTTP/HTTPS port |
+
+Sonarr and Radarr use API v3; Readarr and Prowlarr use API v1; Overseerr uses API v1. SABnzbd and Tautulli pass their API keys as query parameters, while Plex uses the `X-Plex-Token` header. For a Plex server reachable through `plex.direct`, set `PLEX_HOST` to its full hostname and `PLEX_SCHEME=https`.
 
 **Media trackers (optional):** `TRAKT_CLIENT_ID`, `TRAKT_CLIENT_SECRET`, `SIMKL_CLIENT_ID`, `SIMKL_CLIENT_SECRET`, `LETTERBOXD_API_KEY`
 
@@ -159,7 +167,7 @@ Rich viewing analytics from Tautulli/Plex:
 analytics.sh activity                 # Currently watching
 analytics.sh history [count]          # Watch history
 analytics.sh most-watched [period]    # Most watched (week/month/year)
-analytics.sh popular-genres [period]  # Popular genres
+analytics.sh popular-genres           # Common genres in the latest 100 history records
 analytics.sh peak-hours               # Peak watching hours
 analytics.sh user-stats [user]        # User activity
 analytics.sh library-stats            # Plex library stats
@@ -509,7 +517,7 @@ Store in `.env` file and source before running scripts.
 - Overseerr: 5055
 - Plex: 32400
 - Tautulli: 8181
-- SABnzbd: 38080
+- SABnzbd: 8081
 - Notifiarr: 5454
 - Maintainerr: 6246
 - FlareSolverr: 8191
