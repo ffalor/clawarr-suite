@@ -76,6 +76,14 @@ All variables are optional — the skill degrades gracefully when a service key 
 
 **Core services:** `CLAWARR_HOST`, `SONARR_KEY`, `RADARR_KEY`, `LIDARR_KEY`, `READARR_KEY`, `PROWLARR_KEY`, `BAZARR_KEY`, `OVERSEERR_KEY`, `PLEX_TOKEN`, `TAUTULLI_KEY`, `SABNZBD_KEY`, `NOTIFIARR_KEY`
 
+| Endpoint override | Default | Purpose |
+|-------------------|---------|---------|
+| `SABNZBD_PORT` | `38080` | SABnzbd HTTP port |
+| `TAUTULLI_PORT` | `8181` | Tautulli HTTP port |
+| `PLEX_HOST` | `$CLAWARR_HOST` | Plex server host |
+| `PLEX_SCHEME` | `http` | Plex URL scheme (`http` or `https`) |
+| `PLEX_PORT` | `32400` | Plex HTTP/HTTPS port |
+
 **Media trackers (optional):** `TRAKT_CLIENT_ID`, `TRAKT_CLIENT_SECRET`, `SIMKL_CLIENT_ID`, `SIMKL_CLIENT_SECRET`, `LETTERBOXD_API_KEY`
 
 **Companion service SSH (optional):** `RECYCLARR_SSH`, `KOMETA_SSH`, `UNPACKERR_SSH`, `DOCKER_CONFIG_BASE`

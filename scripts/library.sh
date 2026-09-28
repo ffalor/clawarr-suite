@@ -97,7 +97,7 @@ cmd_stats() {
     local missing
     missing=$(echo "$data" | jq '[.[] | select(.monitored == true and .hasFile == false)] | length')
     local size
-    size=$(echo "$data" | jq '[.[] | select(.hasFile == true) | .sizeOnDisk] | add')
+    size=$(echo "$data" | jq '[.[] | select(.hasFile == true) | .sizeOnDisk] | add // 0')
     local size_gb
     size_gb=$(echo "scale=2; $size / 1073741824" | bc)
     
@@ -127,7 +127,7 @@ cmd_stats() {
     local missing_episodes
     missing_episodes=$(echo "$series_data" | jq '[.[] | select(.monitored == true) | ((.statistics.totalEpisodeCount // .statistics.episodeCount // 0) - (.statistics.episodeFileCount // 0))] | add // 0')
     local size
-    size=$(echo "$series_data" | jq '[.[] | .statistics.sizeOnDisk] | add')
+    size=$(echo "$series_data" | jq '[.[] | .statistics.sizeOnDisk] | add // 0')
     local size_gb
     size_gb=$(echo "scale=2; $size / 1073741824" | bc)
     
