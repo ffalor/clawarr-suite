@@ -14,6 +14,7 @@ set -euo pipefail
 
 HOST="${CLAWARR_HOST:-}"
 SABNZBD_KEY="${SABNZBD_KEY:-}"
+SABNZBD_PORT="${SABNZBD_PORT:-38080}"
 
 if [[ -z "$HOST" ]]; then
   echo "❌ Error: CLAWARR_HOST not set"
@@ -41,7 +42,7 @@ sabnzbd_api() {
   shift
   local params="$*"
   
-  local url="http://${HOST}:38080/api?apikey=${SABNZBD_KEY}&mode=${mode}&output=json"
+  local url="http://${HOST}:${SABNZBD_PORT}/api?apikey=${SABNZBD_KEY}&mode=${mode}&output=json"
   if [[ -n "$params" ]]; then
     url="${url}&${params}"
   fi

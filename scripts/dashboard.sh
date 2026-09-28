@@ -19,6 +19,7 @@ SONARR_KEY="${SONARR_KEY:-}"
 RADARR_KEY="${RADARR_KEY:-}"
 TAUTULLI_KEY="${TAUTULLI_KEY:-}"
 SABNZBD_KEY="${SABNZBD_KEY:-}"
+SABNZBD_PORT="${SABNZBD_PORT:-38080}"
 PROWLARR_KEY="${PROWLARR_KEY:-}"
 OVERSEERR_KEY="${OVERSEERR_KEY:-}"
 BAZARR_KEY="${BAZARR_KEY:-}"
@@ -138,7 +139,7 @@ if [[ -n "$SONARR_KEY" ]]; then
   echo "  • Sonarr..."
   SONARR_SERIES=$(api_call sonarr "/series")
   SONARR_QUEUE=$(api_call sonarr "/queue")
-  SONARR_RECENT=$(api_call sonarr "/episode" | jq '[.[] | select(.hasFile == true)] | sort_by(.airDateUtc) | reverse | .[0:10]')
+  SONARR_RECENT=$(api_call sonarr "/series" | jq '[.[]] | sort_by(.added) | reverse | .[0:10]')
   
   SONARR_TOTAL=$(echo "$SONARR_SERIES" | jq 'length')
   SONARR_MONITORED=$(echo "$SONARR_SERIES" | jq '[.[] | select(.monitored == true)] | length')
@@ -152,7 +153,7 @@ fi
 # SABnzbd stats
 if [[ -n "$SABNZBD_KEY" ]]; then
   echo "  • SABnzbd..."
-  SABNZBD_QUEUE=$(curl -sf "http://${HOST}:38080/api?apikey=${SABNZBD_KEY}&mode=queue&output=json" 2>/dev/null || echo '{}')
+  SABNZBD_QUEUE=$(curl -sf "http://${HOST}:${SABNZBD_PORT:-38080}/api?apikey=${SABNZBD_KEY}&mode=queue&output=json" 2>/dev/null || echo '{}')
   SABNZBD_SPEED=$(echo "$SABNZBD_QUEUE" | jq -r '.queue.speed // "0 B/s"')
   SABNZBD_SIZE_LEFT=$(echo "$SABNZBD_QUEUE" | jq -r '.queue.sizeleft // "0 B"')
   SABNZBD_TIME_LEFT=$(echo "$SABNZBD_QUEUE" | jq -r '.queue.timeleft // "0:00:00"')
@@ -199,7 +200,7 @@ SONARR_RT=$(measure_response_time "http://${HOST}:8989/api/v3/health" "X-Api-Key
 RADARR_RT=$(measure_response_time "http://${HOST}:7878/api/v3/health" "X-Api-Key: $RADARR_KEY")
 PLEX_RT=$(measure_response_time "http://${HOST}:32400/identity" "")
 TAUTULLI_RT=$(measure_response_time "http://${HOST}:8181/api/v2?cmd=arnold" "")
-SABNZBD_RT=$(measure_response_time "http://${HOST}:38080/api?mode=version" "")
+SABNZBD_RT=$(measure_response_time "http://${HOST}:${SABNZBD_PORT:-38080}/api?mode=version" "")
 OVERSEERR_RT=$(measure_response_time "http://${HOST}:5055/api/v1/status" "")
 PROWLARR_RT=$(measure_response_time "http://${HOST}:9696/api/v1/health" "X-Api-Key: $PROWLARR_KEY")
 BAZARR_RT=$(measure_response_time "http://${HOST}:6767/api/system/status" "X-Api-Key: $BAZARR_KEY")

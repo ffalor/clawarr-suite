@@ -115,19 +115,17 @@ cmd_stats() {
     
     local series_data
     series_data=$(api_call sonarr "/series")
-    local episode_data
-    episode_data=$(api_call sonarr "/episode")
-    
+
     local total_series
     total_series=$(echo "$series_data" | jq 'length')
     local monitored_series
     monitored_series=$(echo "$series_data" | jq '[.[] | select(.monitored == true)] | length')
     local total_episodes
-    total_episodes=$(echo "$episode_data" | jq 'length')
+    total_episodes=$(echo "$series_data" | jq '[.[] | (.statistics.totalEpisodeCount // .statistics.episodeCount // 0)] | add // 0')
     local downloaded_episodes
-    downloaded_episodes=$(echo "$episode_data" | jq '[.[] | select(.hasFile == true)] | length')
+    downloaded_episodes=$(echo "$series_data" | jq '[.[] | (.statistics.episodeFileCount // 0)] | add // 0')
     local missing_episodes
-    missing_episodes=$(echo "$episode_data" | jq '[.[] | select(.monitored == true and .hasFile == false)] | length')
+    missing_episodes=$(echo "$series_data" | jq '[.[] | select(.monitored == true) | ((.statistics.totalEpisodeCount // .statistics.episodeCount // 0) - (.statistics.episodeFileCount // 0))] | add // 0')
     local size
     size=$(echo "$series_data" | jq '[.[] | .statistics.sizeOnDisk] | add')
     local size_gb
